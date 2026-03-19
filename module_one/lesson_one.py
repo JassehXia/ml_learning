@@ -32,19 +32,26 @@ class LinearRegression:
         for _ in range(self.n_iterations):
             y_hat = self.predict(X)
 
-            # find the average gradients
-            # db0 = (1/N) * -1 * sum(y - y_hat)
-            # db1= (1/N) * -1 * sum( X*(y - y_hat))
+            # --- THE CALCULUS: CALCULATING GRADIENTS ---
+            # We calculate the partial derivative of the Mean Squared Error (MSE)
+            # Loss L = (1/2N) * sum((y - y_hat)^2)
+            
+            # db0 (Intercept Gradient): ∂L/∂β0 = -1/N * Σ(y - ŷ)
+            db0 = -np.mean(y - y_hat)
+            
+            # db1 (Slope Gradient): ∂L/∂β1 = -1/N * Σ((y - ŷ) * x)
+            db1 = -np.mean(X * (y - y_hat))
 
-            db0 = -np.mean(y-y_hat)
-            db1 = -np.mean(X*(y-y_hat))
-
+            # --- THE OPTIMIZATION: GRADIENT DESCENT ---
+            # Update Rule: β = β - (η * gradient)
+            # We move in the opposite direction of the gradient to minimize error.
             self.b0 -= self.eta * db0
             self.b1 -= self.eta * db1
 
             
 
             # Calculate the Mean Squared Error (MSE)
+            # 1/N * Σ(y - ŷ)^2
             MSE = np.mean((y-y_hat)**2)
 
             print(f"b0: {self.b0}, b1: {self.b1}, MSE: {MSE}")  
